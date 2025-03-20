@@ -1,0 +1,60 @@
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: testSuperConstructorAndMethod
+      id: testsuperconstructorandmethod
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: testSuperConstructorAndMethod
+        setup-command: mvn compile
+        command: mvn -Dtest=Unit9Test#testSuperConstructorAndMethod test
+        timeout: 3
+        max-score: 25
+    - name: testMethodOverridingAndSuperMethod
+      id: testmethodoverridingandsupermethod
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: testMethodOverridingAndSuperMethod
+        setup-command: mvn compile
+        command: mvn -Dtest=Unit9Test#testMethodOverridingAndSuperMethod test
+        timeout: 3
+        max-score: 25
+    - name: testChildAndParentInstanceData
+      id: testchildandparentinstancedata
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: testChildAndParentInstanceData
+        setup-command: mvn compile
+        command: mvn -Dtest=Unit9Test#testChildAndParentInstanceData test
+        timeout: 3
+        max-score: 25
+    - name: testStaticMethodAndVariable
+      id: teststaticmethodandvariable
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: testStaticMethodAndVariable
+        setup-command: mvn compile
+        command: mvn -Dtest=Unit9Test#testStaticMethodAndVariable test
+        timeout: 3
+        max-score: 25
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        TESTSUPERCONSTRUCTORANDMETHOD_RESULTS: "${{steps.testsuperconstructorandmethod.outputs.result}}"
+        TESTMETHODOVERRIDINGANDSUPERMETHOD_RESULTS: "${{steps.testmethodoverridingandsupermethod.outputs.result}}"
+        TESTCHILDANDPARENTINSTANCEDATA_RESULTS: "${{steps.testchildandparentinstancedata.outputs.result}}"
+        TESTSTATICMETHODANDVARIABLE_RESULTS: "${{steps.teststaticmethodandvariable.outputs.result}}"
+      with:
+        runners: testsuperconstructorandmethod,testmethodoverridingandsupermethod,testchildandparentinstancedata,teststaticmethodandvariable
