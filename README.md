@@ -1,72 +1,81 @@
+# Unit 9: Inheritance
 
-# Unit 9 - Inheritance and JUnit Tests
+AP Computer Science A
 
-This project is designed to help you understand the key concepts of inheritance in Java, such as:
-- Using `super` in constructors and methods
-- Overriding methods and calling parent methods
-- Using instance data from both parent and child classes
-- Understanding and working with static methods and variables
+## Overview
 
-## Project Structure
-
-- **Unit9.java**: This file contains several classes that you need to complete by following the provided comments. You will be working with inheritance, method overriding, `super` keyword usage, and static methods.
-- **Unit9Test.java**: This file contains JUnit tests to check your understanding of the key concepts. Once you've completed the tasks in `Unit9.java`, the tests will help you verify that your implementations are correct.
+This project covers **Unit 9: Inheritance** concepts including `extends`, `super` keyword (in constructors and method calls), method overriding, accessing parent/child instance data, and static methods/variables. Complete the classes in `Unit9.java` and run the provided JUnit tests to verify your work.
 
 ## Getting Started
 
-### Prerequisites
+### Option 1: GitHub Codespaces (Recommended)
 
-Make sure you have the following tools installed:
-- **Java** (JDK 8 or later)
-- **Maven** (for managing dependencies and running tests)
+1. Click the green **Code** button on this repository
+2. Select the **Codespaces** tab
+3. Click **Create codespace on main**
+4. Wait for the environment to build (~2 minutes the first time)
+5. Start coding in `src/main/java/com/csplusplus/Unit9.java`
 
+> **Note:** If the Java extension shows errors on first load, press `Cmd+Shift+P` (Mac) or `Ctrl+Shift+P` (Windows) and run **"Developer: Reload Window"**. This is a one-time setup step.
 
-### Instructions
+### Option 2: Local Development
 
-1. Open `Unit9.java` located in the `src/main/java/com/csplusplus` directory.
-2. Follow the comments in each class to implement the required constructors, methods, and any other code.
-3. Once you've completed the implementation, run the JUnit tests to check your work.
+1. Accept the assignment via the GitHub Classroom link
+2. Clone the repository using GitHub Desktop
+3. Open the project in your IDE
+4. **Requirements:** Java 17+, Maven 3.x
 
+## Running Tests
 
-### Test Coverage
+Run all tests:
+```
+mvn test
+```
 
-The tests in `Unit9Test.java` cover the following topics:
+Run a single test:
+```
+mvn -Dtest=Unit9Test#testSuperConstructorAndMethod test
+```
 
-1. **Super in Constructors and Methods**:
-   - Ensure that the child class calls the parent constructor using `super`.
-   - Test method overriding and using `super` to call the parent method.
+## Scoring
 
-2. **Method Overriding and Parent Method Calls**:
-   - Verify that child classes properly override methods.
-   - Ensure that the child class can still access parent methods when necessary.
+| # | Test | Points | Concepts |
+|---|------|--------|----------|
+| 1 | Super constructor & method override | 25 | `super()`, overriding `getName()` |
+| 2 | Method overriding & parent method call | 25 | `@Override`, `super.makeSound()` |
+| 3 | Child and parent instance data | 25 | Accessing inherited fields |
+| 4 | Static method & variable | 25 | `static` keyword |
+| | **Total** | **100** | |
 
-3. **Using Parent and Child Instance Data**:
-   - Make sure child classes can use both their own instance data and data inherited from the parent class.
+## What You Need to Implement
 
-4. **Static Methods and Variables**:
-   - Check that static methods work correctly and that static variables retain their value across method calls.
+### Pair 1: Person → Employee
+- `Person`: constructor(String name), getName()
+- `Employee extends Person`: constructor calls super(name), overrides getName(), getJobTitle()
 
-### Key Concepts
+### Pair 2: Animal → Dog
+- `Animal`: constructor(String name), makeSound() returns "Some sound"
+- `Dog extends Animal`: overrides makeSound() to return "Bark", makeParentSound() calls super.makeSound()
 
-- **Inheritance (`extends`)**: Allows one class (child class) to inherit fields and methods from another class (parent class).
-- **Polymorphism**: Allows objects of different types to be treated as objects of a common parent type.
-- **Method Overriding**: Allows a subclass to provide a specific implementation of a method that is already defined in its parent class.
-- **The `super` Keyword**: Refers to the parent class and is used to invoke the parent class's constructor and methods.
-- **Static Methods and Variables**: Methods that belong to the class rather than any instance of the class, and variables that are shared among all instances.
+### Pair 3: Vehicle → Car
+- `Vehicle`: constructor(int speed), getSpeed()
+- `Car extends Vehicle`: constructor calls super(speed), getDetails() returns "Model: X, Speed: Y"
 
+### Calculator (static)
+- `public static int counter`
+- `static add(int a, int b)`: increments counter, returns sum
 
-## Additional Resources
+## Common Mistakes
 
-- [Oracle Java Documentation - Inheritance](https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html)
-- [Oracle Java Documentation - Polymorphism](https://docs.oracle.com/javase/tutorial/java/IandI/polymorphism.html)
-- [JUnit Documentation](https://junit.org/junit5/docs/current/user-guide/)
+- Forgetting `super()` as the **first line** of the child constructor
+- Not using `super.methodName()` to call parent's version of an overridden method
+- Making `counter` an instance variable instead of `static`
+- Forgetting that `protected` fields are accessible in child classes
 
----
+## Autograding
 
-## Support
-If you encounter any issues or have questions about the assignment, please reach out during office hours or post in the course discussion forum.
+Your code is automatically graded when you push to GitHub. Check the **Actions** tab to see your score.
 
-For additional assistance, contact: **Kevin** at [kevin@csplusplus.com](mailto:kevin@csplusplus.com).
+## Contact
 
-
-
+For questions, contact [kevin@csplusplus.com](mailto:kevin@csplusplus.com)
