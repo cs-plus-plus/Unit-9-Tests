@@ -20,7 +20,7 @@ jobs:
         distribution: 'temurin'
     - name: testSuperConstructorAndMethod
       id: testsuperconstructorandmethod
-      uses: classroom-resources/autograding-command-grader@v1
+      uses: cs-plus-plus/autograding-command-grader@v1
       with:
         test-name: testSuperConstructorAndMethod
         setup-command: mvn compile
@@ -29,7 +29,7 @@ jobs:
         max-score: 25
     - name: testMethodOverridingAndSuperMethod
       id: testmethodoverridingandsupermethod
-      uses: classroom-resources/autograding-command-grader@v1
+      uses: cs-plus-plus/autograding-command-grader@v1
       with:
         test-name: testMethodOverridingAndSuperMethod
         setup-command: mvn compile
@@ -38,7 +38,7 @@ jobs:
         max-score: 25
     - name: testChildAndParentInstanceData
       id: testchildandparentinstancedata
-      uses: classroom-resources/autograding-command-grader@v1
+      uses: cs-plus-plus/autograding-command-grader@v1
       with:
         test-name: testChildAndParentInstanceData
         setup-command: mvn compile
@@ -47,7 +47,7 @@ jobs:
         max-score: 25
     - name: testStaticMethodAndVariable
       id: teststaticmethodandvariable
-      uses: classroom-resources/autograding-command-grader@v1
+      uses: cs-plus-plus/autograding-command-grader@v1
       with:
         test-name: testStaticMethodAndVariable
         setup-command: mvn compile
@@ -55,7 +55,7 @@ jobs:
         timeout: 3
         max-score: 25
     - name: Autograding Reporter
-      uses: classroom-resources/autograding-grading-reporter@v1
+      uses: cs-plus-plus/autograding-grading-reporter@v1
       env:
         TESTSUPERCONSTRUCTORANDMETHOD_RESULTS: "${{steps.testsuperconstructorandmethod.outputs.result}}"
         TESTMETHODOVERRIDINGANDSUPERMETHOD_RESULTS: "${{steps.testmethodoverridingandsupermethod.outputs.result}}"
