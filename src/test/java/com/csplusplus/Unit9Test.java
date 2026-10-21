@@ -1,6 +1,7 @@
 package com.csplusplus;
 
 import static org.junit.jupiter.api.Assertions.*;
+import java.lang.reflect.Modifier;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 
@@ -39,18 +40,38 @@ public class Unit9Test {
     }
 
     @Test
-    @DisplayName("testStaticMethodAndVariable: Calculator static add and counter (25 points)")
-    public void testStaticMethodAndVariable() {
-        assertAll("Static Method & Variable",
-            () -> assertEquals(5, Unit9.Calculator.add(2, 3),
-                "Calculator.add(2, 3) should return 5"),
-            () -> assertEquals(1, Unit9.Calculator.counter,
-                "After one add() call, counter should be 1"),
+    @DisplayName("testAbstractClassAndInterface: Square extends abstract Shape and implements Resizable (25 points)")
+    public void testAbstractClassAndInterface() {
+        assertAll("Abstract Class, Abstract Method & Interface",
+            () -> assertTrue(Modifier.isAbstract(Unit9.Shape.class.getModifiers()),
+                "Shape should be an abstract class: public static abstract class Shape"),
+            () -> assertTrue(isAbstractMethod(Unit9.Shape.class, "area"),
+                "Shape should declare area() as an abstract method with no body: public abstract double area();"),
+            () -> assertTrue(Unit9.Resizable.class.isInterface(),
+                "Resizable should be an interface"),
             () -> {
-                Unit9.Calculator.add(10, 20);
-                assertEquals(2, Unit9.Calculator.counter,
-                    "After two add() calls, counter should be 2");
+                Unit9.Shape shape = new Unit9.Square(3);   // a Square IS-A Shape
+                assertEquals(9.0, shape.area(), 0.0001,
+                    "new Square(3).area() should return 9.0 (side * side)");
+                assertEquals("Area: 9.0", shape.describe(),
+                    "describe() should return \"Area: \" + area(), so a Square with side 3 gives \"Area: 9.0\"");
+            },
+            () -> {
+                Unit9.Square square = new Unit9.Square(2);
+                Unit9.Resizable resizable = square;        // a Square IS-A Resizable
+                resizable.scale(3);
+                assertEquals(36.0, square.area(), 0.0001,
+                    "After scale(3), a Square with side 2 should have side 6 and area 36.0");
             }
         );
+    }
+
+    /** True when cls itself declares a no-argument method with this name and it is abstract. */
+    private static boolean isAbstractMethod(Class<?> cls, String name) {
+        try {
+            return Modifier.isAbstract(cls.getDeclaredMethod(name).getModifiers());
+        } catch (NoSuchMethodException e) {
+            return false;
+        }
     }
 }

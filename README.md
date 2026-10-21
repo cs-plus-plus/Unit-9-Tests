@@ -2,7 +2,7 @@
 
 > **Unit 9** | 100 Points | 4 Autograded Tests
 
-In this assignment you will use `extends`, the `super` keyword, method overriding with `@Override`, and work with parent/child class hierarchies. You will also implement a static method with a class-level counter.
+In this assignment you will use `extends`, the `super` keyword, method overriding with `@Override`, and work with parent/child class hierarchies. You will also write an abstract class with an abstract method, and an interface that a class implements.
 
 ---
 
@@ -86,24 +86,49 @@ public class Dog extends Animal {
 }
 ```
 
-### Static Methods and Variables
+### Abstract Classes and Abstract Methods
 
-Static members belong to the class, not to any individual object:
+An `abstract` class can't be created with `new`. It exists to be extended. An `abstract` method has a header but no body, and every (non-abstract) subclass must write it:
 
 ```java
-public class Calculator {
-    public static int counter = 0;
+public abstract class Pet {
+    public abstract String speak();       // no body: subclasses decide
 
-    public static int add(int a, int b) {
-        counter++;
-        return a + b;
+    public String greet() {
+        return "The pet says " + speak(); // calls the subclass's version
     }
 }
 
-// Usage:
-Calculator.add(3, 5);     // returns 8, counter is 1
-Calculator.add(10, 20);   // returns 30, counter is 2
-System.out.println(Calculator.counter);  // 2
+public class Cat extends Pet {
+    @Override
+    public String speak() {
+        return "Meow";
+    }
+}
+
+// Pet p = new Pet();          // ERROR: Pet is abstract
+Pet p = new Cat();
+System.out.println(p.greet()); // The pet says Meow
+```
+
+### Interfaces
+
+An `interface` is a list of method headers. A class that `implements` the interface promises to write every one of them. A class can extend ONE class but implement any number of interfaces:
+
+```java
+public interface Playable {
+    void play();                // no body
+}
+
+public class Song implements Playable {
+    @Override
+    public void play() {
+        System.out.println("Playing a song");
+    }
+}
+
+Playable thing = new Song();    // a Song IS-A Playable
+thing.play();                   // Playing a song
 ```
 
 ---
@@ -175,18 +200,33 @@ c.getSpeed()                   // 120 (inherited)
 c.getDetails()                 // "Model: Tesla, Speed: 120"
 ```
 
-### Group 4: Calculator (25 pts)
+### Group 4: Shape, Resizable and Square (25 pts)
 
-A standalone class (no inheritance) with static members:
-- Static variable: `public static int counter` (starts at 0)
-- Static method: `add(int a, int b)` — increments `counter` and returns `a + b`
+**Resizable interface:**
+- Declares one method: `void scale(double factor);` (no body)
+
+**Shape class (abstract):**
+- Make the class abstract: `public static abstract class Shape`
+- Abstract method: `public abstract double area();` (no body)
+- Method: `describe()` — returns `"Area: "` followed by `area()` (e.g., `"Area: 9.0"`)
+
+**Square class (extends Shape, implements Resizable):**
+- Constructor: `Square(double side)` — stores the side length
+- `area()` — returns `side * side` (this fills in Shape's abstract method)
+- `scale(double factor)` — multiplies `side` by `factor` (this is Resizable's method)
 
 ```java
-Calculator.counter             // 0
-Calculator.add(3, 5)           // returns 8, counter is 1
-Calculator.add(10, 20)         // returns 30, counter is 2
-Calculator.counter             // 2
+Shape s = new Square(3);       // a Square IS-A Shape
+s.area()                       // 9.0
+s.describe()                   // "Area: 9.0"
+
+Square sq = new Square(2);
+Resizable r = sq;              // a Square IS-A Resizable
+r.scale(3);                    // side is now 6
+sq.area()                      // 36.0
 ```
+
+The test also checks that `Shape` really is `abstract`, that `area()` is an abstract method, and that `Resizable` is an interface.
 
 ---
 
@@ -215,7 +255,9 @@ public class Unit9 {
     public static class Dog extends Animal { ... }
     public static class Vehicle { ... }
     public static class Car extends Vehicle { ... }
-    public static class Calculator { ... }
+    public interface Resizable { ... }
+    public static abstract class Shape { ... }
+    public static class Square extends Shape implements Resizable { ... }
 }
 ```
 
@@ -225,10 +267,10 @@ public class Unit9 {
 
 | Test | What It Checks | Points |
 |------|---------------|--------|
-| testPersonEmployee | super constructor, getName override, getJobTitle | 25 |
-| testAnimalDog | makeSound override, makeParentSound calls super | 25 |
-| testVehicleCar | Inherited getSpeed, getDetails format | 25 |
-| testCalculator | Static counter increments, add returns correct sum | 25 |
+| testSuperConstructorAndMethod | super constructor, getName override, getJobTitle | 25 |
+| testMethodOverridingAndSuperMethod | makeSound override, makeParentSound calls super | 25 |
+| testChildAndParentInstanceData | Inherited speed, getDetails format | 25 |
+| testAbstractClassAndInterface | Shape and area() are abstract, Resizable is an interface, Square's area/describe/scale | 25 |
 
 **Total: 100 points**
 
@@ -289,23 +331,34 @@ public class Practice {
 }
 ```
 
-**Example 3 — Static counter:**
+**Example 3 — Abstract class + interface:**
 ```java
 // Practice.java
 public class Practice {
-    static class Counter {
-        public static int count = 0;
-        public static int increment() {
-            count++;
-            return count;
-        }
+    interface Chargeable {
+        void charge(int minutes);
+    }
+
+    static abstract class Device {
+        public abstract int battery();
+        public String status() { return "Battery: " + battery() + "%"; }
+    }
+
+    static class Phone extends Device implements Chargeable {
+        private int level = 20;
+        @Override
+        public int battery() { return level; }
+        @Override
+        public void charge(int minutes) { level = Math.min(100, level + minutes); }
     }
 
     public static void main(String[] args) {
-        System.out.println(Counter.increment());  // 1
-        System.out.println(Counter.increment());  // 2
-        System.out.println(Counter.increment());  // 3
-        System.out.println("Total: " + Counter.count);  // 3
+        Phone p = new Phone();
+        Device d = p;
+        Chargeable c = p;
+        System.out.println(d.status());  // Battery: 20%
+        c.charge(30);
+        System.out.println(d.status());  // Battery: 50%
     }
 }
 ```
@@ -318,7 +371,7 @@ public class Practice {
 2. Use `@Override` annotation when overriding a method — it helps catch typos
 3. Use `super.methodName()` to call the parent's version of an overridden method
 4. All classes in this assignment are `static inner classes` of `Unit9`
-5. The `Calculator.counter` must be `public static` so the test can access it directly
+5. An abstract method ends with a semicolon and has no `{ }` body: `public abstract double area();`
 6. The `getDetails()` format must match exactly: `"Model: [model], Speed: [speed]"`
 
 ---
@@ -334,11 +387,17 @@ It calls the parent class's constructor that takes a `String` parameter. This in
 **Q: What is the difference between overriding and overloading?**
 Overriding replaces a parent method with the same name AND same parameters. Overloading creates multiple methods with the same name but different parameters.
 
+**Q: What is the difference between an abstract class and an interface?**
+An abstract class can have fields, constructors, and finished methods (like `describe()`) alongside its abstract ones, and a class can extend only one. An interface is just a list of method headers, and a class can implement as many as it needs. `Square` uses both: it extends `Shape` and implements `Resizable`.
+
+**Q: Why won't my code compile after I add `void scale(double factor);` to Resizable?**
+Because `Square` implements `Resizable`, Java now requires `Square` to have a `scale(double factor)` method. Write it and the error goes away. The same goes for `area()` once you make it abstract in `Shape`.
+
 **Q: For `Employee.getName()`, should I access the parent's `name` field directly?**
 No — `name` is `private` in `Person`. Call `super.getName()` to get it: `return "Employee: " + super.getName();`
 
 ---
 
-View all assignments and scoring breakdowns at [csplusplus.com/maven-tests](https://csplusplus.com/maven-tests)
+View all assignments and scoring breakdowns at [csplusplus.com/github-assignments](https://csplusplus.com/github-assignments)
 
 *CS++ — AP Computer Science A — [csplusplus.com](https://csplusplus.com)*

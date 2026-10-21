@@ -45,13 +45,13 @@ jobs:
         command: mvn -Dtest=Unit9Test#testChildAndParentInstanceData test
         timeout: 3
         max-score: 25
-    - name: testStaticMethodAndVariable
-      id: teststaticmethodandvariable
+    - name: testAbstractClassAndInterface
+      id: testabstractclassandinterface
       uses: cs-plus-plus/autograding-command-grader@v1
       with:
-        test-name: testStaticMethodAndVariable
+        test-name: testAbstractClassAndInterface
         setup-command: mvn compile
-        command: mvn -Dtest=Unit9Test#testStaticMethodAndVariable test
+        command: mvn -Dtest=Unit9Test#testAbstractClassAndInterface test
         timeout: 3
         max-score: 25
     - name: Autograding Reporter
@@ -60,6 +60,6 @@ jobs:
         TESTSUPERCONSTRUCTORANDMETHOD_RESULTS: "${{steps.testsuperconstructorandmethod.outputs.result}}"
         TESTMETHODOVERRIDINGANDSUPERMETHOD_RESULTS: "${{steps.testmethodoverridingandsupermethod.outputs.result}}"
         TESTCHILDANDPARENTINSTANCEDATA_RESULTS: "${{steps.testchildandparentinstancedata.outputs.result}}"
-        TESTSTATICMETHODANDVARIABLE_RESULTS: "${{steps.teststaticmethodandvariable.outputs.result}}"
+        TESTABSTRACTCLASSANDINTERFACE_RESULTS: "${{steps.testabstractclassandinterface.outputs.result}}"
       with:
-        runners: testsuperconstructorandmethod,testmethodoverridingandsupermethod,testchildandparentinstancedata,teststaticmethodandvariable
+        runners: testsuperconstructorandmethod,testmethodoverridingandsupermethod,testchildandparentinstancedata,testabstractclassandinterface

@@ -2,7 +2,7 @@ package com.csplusplus;
 
 /**
  * Unit 9: Inheritance — demonstrates extends, super, method overriding,
- * and static methods/variables.
+ * abstract classes and methods, and interfaces.
  */
 public class Unit9 {
 
@@ -129,19 +129,70 @@ public class Unit9 {
     }
 
     // ═══════════════════════════════════════════════════════════════════════
-    // CLASS 4: Calculator (static methods and variables)
+    // GROUP 4: Shape (abstract class) + Resizable (interface) → Square
     // ═══════════════════════════════════════════════════════════════════════
 
     /**
-     * Calculator class demonstrating static variables and methods.
+     * Resizable is an INTERFACE: a list of methods that every class which
+     * "implements Resizable" promises to have. Interface methods have no body.
+     *
+     * <p>You need to implement:</p>
+     * <ul>
+     *   <li>The method header {@code void scale(double factor);} (no body, just a semicolon)</li>
+     * </ul>
+     */
+    public interface Resizable {
+        // TODO: Declare the method  void scale(double factor);
+    }
+
+    /**
+     * Shape is an ABSTRACT class. Nobody can create a {@code new Shape()}, but
+     * other classes can extend it. Its abstract method area() has no body, so
+     * every subclass must write its own.
      *
      * <p>Points: Part of 25-point test</p>
      *
-     * <p>Hint: Static variables belong to the class, not instances.</p>
+     * <p>You need to implement:</p>
+     * <ul>
+     *   <li>Make the class abstract: {@code public static abstract class Shape}</li>
+     *   <li>An abstract method {@code public abstract double area();} (no body)</li>
+     *   <li>A describe() method that returns "Area: " + area()</li>
+     * </ul>
+     *
+     * <p>Hint: describe() can call area() even though Shape never says how to
+     * compute it. Java runs the subclass's area() when describe() is called.</p>
      */
-    public static class Calculator {
-        // TODO: public static int counter
+    public static class Shape {
+        // TODO: Add the abstract keyword to the class header above
 
-        // TODO: static add(int a, int b) — increment counter, return a + b
+        // TODO: public abstract double area();
+
+        // TODO: describe() returns "Area: " + area()
+    }
+
+    /**
+     * Square extends Shape AND implements Resizable.
+     *
+     * <p>Points: Part of 25-point test</p>
+     *
+     * <p>You need to implement:</p>
+     * <ul>
+     *   <li>A constructor Square(double side) that sets side</li>
+     *   <li>area() returns side * side (Shape's abstract method)</li>
+     *   <li>scale(double factor) multiplies side by factor (Resizable's method)</li>
+     * </ul>
+     *
+     * <p>Hint: Java will not compile Square until it has BOTH area() and scale().
+     * That is the promise "extends an abstract class" and "implements an
+     * interface" makes.</p>
+     */
+    public static class Square extends Shape implements Resizable {
+        private double side;
+
+        // TODO: Constructor(double side)
+
+        // TODO: area() returns side * side
+
+        // TODO: scale(double factor) multiplies side by factor
     }
 }
